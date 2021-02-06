@@ -1,0 +1,18 @@
+// Eliminate OASDI maximum taxable earnings (MTE)
+// : current law MTE is indexed by the SSA average wage index (AWI)
+// Reform_Baseline: 2017_law.json
+// Reform_Description:
+// -  raise MTE to essentially infinity in 2020 and wage index after that
+// Reform_Parameter_Map:
+// - 1: SS_Earnings_c
+// NOTE: this reform produces the following MTE by year:
+//       2017:  127200
+//       2018:  wage-indexed 127200
+//       2019:  wage-indexed 127200
+//       2020:  9e99 (9 with 99 zeros after it, a very large MTE)
+//       2021:  wage-indexed 9e99 (an even bigger MTE value)
+{
+    "SS_Earnings_c": {
+        "2020": 9e99
+    }
+}

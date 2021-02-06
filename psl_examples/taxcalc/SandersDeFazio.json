@@ -1,0 +1,15 @@
+// Title: Social Security Expansion Act: Sen. Bernie Sanders and Rep. Peter DeFazio
+// Reform_File_Author: Duncan Hobbs
+// Reform_Reference: https://defazio.house.gov/media-center/press-releases/defazio-sanders-introduce-legislation-to-strengthen-and-expand-social
+// SSA Analysis: https://www.ssa.gov/OACT/solvency/SandersDeFazio_20190213.pdf
+// Reform_Baseline: policy_current_law.json
+// Reform_Description:
+//   - Apply the combined OASDI payroll tax rate on earnings above $250,000 (1)
+//   - Apply a separate 6.2% tax on investment income above ACA threshold (2)
+// Reform_Parameter_Map:
+//   1: SS_Earnings_thd
+//   2: NIIT_rt
+{
+    "SS_Earnings_thd": {"2020": 250000},
+    "NIIT_rt": {"2020": 0.100}
+}
