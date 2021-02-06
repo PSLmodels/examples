@@ -1,0 +1,6 @@
+name: psl-examples-env
+channels:
+  - PSLmodels
+dependencies:
+- python
+- taxcalc>=3.0.0
