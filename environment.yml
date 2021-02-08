@@ -4,3 +4,9 @@ channels:
 dependencies:
 - python
 - taxcalc>=3.0.0
+- pytest>=6.0
+- pytest-pep8
+- pytest-xdist
+- pycodestyle
+- pylint
+- coverage
