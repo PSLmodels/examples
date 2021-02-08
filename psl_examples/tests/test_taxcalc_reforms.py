@@ -14,8 +14,9 @@ import pandas as pd
 # pylint: disable=import-error
 from taxcalc import Calculator, Policy, Records
 
+CUR_PATH = os.path.abspath(os.path.dirname(__file__))
 
-def test_2017_law_reform(tests_path):
+def test_2017_law_reform():
     """
     Check that policy parameter values in a future year under current-law
     policy and under the reform specified in the 2017_law.json file are
@@ -23,7 +24,7 @@ def test_2017_law_reform(tests_path):
     """
     # create pre metadata dictionary for 2017_law.json reform in fyear
     pol = Policy()
-    reform_file = os.path.join(tests_path, '..', 'reforms', '2017_law.json')
+    reform_file = os.path.join(CUR_PATH, '..', 'taxcalc', '2017_law.json')
     with open(reform_file, 'r') as rfile:
         rtext = rfile.read()
     pol.implement_reform(Policy.read_json_reform(rtext))
@@ -72,7 +73,7 @@ def test_2017_law_reform(tests_path):
             assert act == exp, '{} a={} != e={}'.format(name, act, exp)
 
 
-def test_round_trip_tcja_reform(tests_path):
+def test_round_trip_tcja_reform():
     """
     Check that current-law policy has the same policy parameter values in
     a future year as does a compound reform that first implements the
@@ -91,14 +92,14 @@ def test_round_trip_tcja_reform(tests_path):
     clp_mdata = dict(pol.items())
     # create rtr metadata dictionary for round-trip reform in fyear
     pol = Policy()
-    reform_file = os.path.join(tests_path, '..', 'reforms', '2017_law.json')
+    reform_file = os.path.join(CUR_PATH, '..', 'taxcalc', '2017_law.json')
     with open(reform_file, 'r') as rfile:
         rtext = rfile.read()
     pol.implement_reform(Policy.read_json_reform(rtext))
 
     assert not pol.parameter_warnings
     assert not pol.errors
-    reform_file = os.path.join(tests_path, '..', 'reforms', 'TCJA.json')
+    reform_file = os.path.join(CUR_PATH, '..', 'taxcalc', 'TCJA.json')
     with open(reform_file, 'r') as rfile:
         rtext = rfile.read()
     pol.implement_reform(Policy.read_json_reform(rtext))
@@ -132,7 +133,7 @@ def test_round_trip_tcja_reform(tests_path):
         raise ValueError(msg)
 
 
-def test_reform_json_and_output(tests_path):
+def test_reform_json_and_output():
     """
     Check that each JSON reform file can be converted into a reform dictionary
     that can then be passed to the Policy class implement_reform method that
@@ -176,7 +177,7 @@ def test_reform_json_and_output(tests_path):
 
     # specify Records object containing cases data
     tax_year = 2020
-    cases_path = os.path.join(tests_path, '..', 'reforms', 'cases.csv')
+    cases_path = os.path.join(CUR_PATH, '..', 'taxcalc', 'cases.csv')
     cases = Records(data=cases_path,
                     start_year=tax_year,  # set raw input data year
                     gfactors=None,  # keeps raw data unchanged
@@ -196,10 +197,10 @@ def test_reform_json_and_output(tests_path):
         failures.append(res_path)
     del calc
     # read 2017_law.json reform file and specify its parameters dictionary
-    pre_tcja_jrf = os.path.join(tests_path, '..', 'reforms', '2017_law.json')
+    pre_tcja_jrf = os.path.join(CUR_PATH, '..', 'taxcalc', '2017_law.json')
     pre_tcja = Policy.read_json_reform(pre_tcja_jrf)
     # check reform file contents and reform results for each reform
-    reforms_path = os.path.join(tests_path, '..', 'reforms', '*.json')
+    reforms_path = os.path.join(CUR_PATH, '..', 'taxcalc', '*.json')
     json_reform_files = glob.glob(reforms_path)
     for jrf in json_reform_files:
         # determine reform's baseline by reading contents of jrf
@@ -231,12 +232,12 @@ def test_reform_json_and_output(tests_path):
         raise ValueError(msg)
 
 
-def reform_results(rid, reform_dict, puf_data, reform_2017_law):
+def reform_results(rid, reform_dict, reform_2017_law):
     """
     Return actual results of the reform specified by rid and reform_dict.
     """
     # pylint: disable=too-many-locals
-    rec = Records(data=puf_data)
+    rec = Records.cps_constructor()
     # create baseline Calculator object, calc1
     pol = Policy()
     if reform_dict['baseline'] == '2017_law.json':
@@ -279,20 +280,20 @@ def reform_results(rid, reform_dict, puf_data, reform_2017_law):
 
 
 @pytest.fixture(scope='module', name='baseline_2017_law')
-def fixture_baseline_2017_law(tests_path):
+def fixture_baseline_2017_law():
     """
-    Read ../reforms/2017_law.json and return its policy dictionary.
+    Read ../taxcalc/2017_law.json and return its policy dictionary.
     """
-    pre_tcja_jrf = os.path.join(tests_path, '..', 'reforms', '2017_law.json')
+    pre_tcja_jrf = os.path.join(CUR_PATH, '..', 'taxcalc', '2017_law.json')
     return Policy.read_json_reform(pre_tcja_jrf)
 
 
 @pytest.fixture(scope='module', name='reforms_dict')
-def fixture_reforms_dict(tests_path):
+def fixture_reforms_dict():
     """
     Read reforms.json and convert to dictionary.
     """
-    reforms_path = os.path.join(tests_path, 'reforms.json')
+    reforms_path = os.path.join(CUR_PATH, 'reforms.json')
     with open(reforms_path, 'r') as rfile:
         rjson = rfile.read()
     return json.loads(rjson)
@@ -301,18 +302,17 @@ def fixture_reforms_dict(tests_path):
 NUM_REFORMS = 64  # when changing this also change num_reforms in conftest.py
 
 
-@pytest.mark.requires_pufcsv
 @pytest.mark.parametrize('rid', [i for i in range(1, NUM_REFORMS + 1)])
-def test_reforms(rid, test_reforms_init, tests_path, baseline_2017_law,
-                 reforms_dict, puf_subsample):
+def test_reforms(rid, test_reforms_init, baseline_2017_law,
+                 reforms_dict):
     """
     Write actual reform results to files.
     """
     # pylint: disable=too-many-arguments
     assert test_reforms_init == NUM_REFORMS
     actual = reform_results(rid, reforms_dict[str(rid)],
-                            puf_subsample, baseline_2017_law)
-    afile_path = os.path.join(tests_path,
+                            baseline_2017_law)
+    afile_path = os.path.join(CUR_PATH,
                               'reform_actual_{}.csv'.format(rid))
     with open(afile_path, 'w') as afile:
         afile.write('rid,res1,res2,res3,res4\n')
