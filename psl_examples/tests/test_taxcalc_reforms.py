@@ -16,6 +16,7 @@ from taxcalc import Calculator, Policy, Records
 
 CUR_PATH = os.path.abspath(os.path.dirname(__file__))
 
+
 def test_2017_law_reform():
     """
     Check that policy parameter values in a future year under current-law
