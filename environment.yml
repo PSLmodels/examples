@@ -3,10 +3,12 @@ channels:
   - PSLmodels
 dependencies:
 - python
-- taxcalc>=3.0.0
 - pytest>=6.0
 - pytest-pep8
 - pytest-xdist
 - pycodestyle
 - pylint
 - coverage
+- pip
+- pip:
+  - pip install git+https://github.com/PSLmodels/Tax-Calculator.git
