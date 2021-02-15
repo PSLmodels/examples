@@ -1,12 +1,20 @@
 name: psl-examples-env
 channels:
-  - PSLmodels
+  - conda-forge
 dependencies:
 - python
-- taxcalc>=3.0.0
+- "numpy>=1.14"
+- "pandas>=1.2.0"
+- "bokeh>=1.4.0"
+- requests
+- numba
+- "paramtools>=0.17.0"
 - pytest>=6.0
 - pytest-pep8
 - pytest-xdist
 - pycodestyle
 - pylint
 - coverage
+- pip
+- pip:
+  - git+https://github.com/PSLmodels/Tax-Calculator.git
