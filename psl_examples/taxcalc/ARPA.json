@@ -1,5 +1,5 @@
 // Title: American Rescue Plan Act
-// Reform_File_Author: 
+// Reform_File_Author:
 // Reform_Reference: https://www.congress.gov/117/bills/hr1319/BILLS-117hr1319enr.pdf
 // Reform_Baseline: policy_current_law.json
 // Reform_Description:
@@ -41,17 +41,17 @@
                    "2022": [0, 0, 0, 0, 0]},
     "CTC_new_prt": {"2021": 0.05,
                     "2022": 0},
-    "EITC_c": {"2021": [1502.46, 3606.44, 5960.95, 6706.58],
-               "2022": [546.21, 3640.7,  6017.58, 6770.29]},
+    "EITC_c": {"2021": [1502, 3618, 5980, 6728],
+               "2022": [560, 3733,  6064, 6935]},
     "EITC_rt": {"2021": [0.153, 0.34, 0.4, 0.45],
                 "2022": [0.0765, 0.34, 0.4, 0.45]},
     "EITC_ps": {"2021": [11610, 19464.12, 19464.12, 19464.12],
-                "2022": [8931.38, 19649.03, 19649.03, 19649.03]},
+                "2022": [9160, 20130, 20130, 20130]},
     "EITC_MinEligAge": {"2021": 19,
                         "2022": 25},
     "EITC_MaxEligAge": {"2021": 125,
                         "2022": 64},
-    "EITC_InvestIncome_c": {"2021": 10000},
+    "EITC_InvestIncome_c": {"2021": 10000, "2022": 10300},
     "EITC_sep_filers_elig": {"2021": true},
     "CDCC_c": {"2021": 8000,
                "2022": 3000},
