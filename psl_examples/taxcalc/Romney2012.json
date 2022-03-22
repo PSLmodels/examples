@@ -1,0 +1,32 @@
+// Title: Romney 2012 Campaign Tax Proposals
+// Reform_File_Author: Jason DeBacker and John P. Ryan
+// Reform_Reference:  https://taxfoundation.org/simulating-economic-effects-romneys-tax-plan/
+// Reform_Baseline: 2017_law.json
+// Reform_Description:
+// - 20 percent reduction in all personal marginal income tax rates
+// - Eliminate Capital Gains Tax for low and middle income earners
+// - Eliminate the Alternative Minimum Tax
+
+{
+    "II_rt1": {"2013": 0.08},
+    "II_rt2": {"2013": 0.12},
+    "II_rt3": {"2013": 0.20},
+    "II_rt4": {"2013": 0.224},
+    "II_rt5": {"2013": 0.264},
+    "II_rt6": {"2013": 0.28},
+    "II_rt7": {"2013": 0.3168},
+    "PT_rt1": {"2013": 0.08},
+    "PT_rt2": {"2013": 0.12},
+    "PT_rt3": {"2013": 0.20},
+    "PT_rt4": {"2013": 0.224},
+    "PT_rt5": {"2013": 0.264},
+    "PT_rt6": {"2013": 0.28},
+    "PT_rt7": {"2013": 0.3168},
+    "CG_rt1": {"2013": 0.0},
+    "CG_rt2": {"2013": 0.0},
+    "AMT_em_ps": {"2013": [9e+99, 9e+99, 9e+99, 9e+99, 9e+99]}
+}
+
+// Provisions not modeled
+// - Reduce Corporate Income Tax from 35 percent to 25 percent
+// - Eliminate the federal Estate Tax
