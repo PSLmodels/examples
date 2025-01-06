@@ -24,9 +24,12 @@
     "PT_rt7": {"2013": 0.3168},
     "CG_rt1": {"2013": 0.0},
     "CG_rt2": {"2013": 0.0},
+    "NIIT_rt": {"2013": 0.0},
+    "AMEDT_rt": {"2013": 0.0},
     "AMT_em_ps": {"2013": [9e+99, 9e+99, 9e+99, 9e+99, 9e+99]}
 }
 
 // Provisions not modeled
 // - Reduce Corporate Income Tax from 35 percent to 25 percent
 // - Eliminate the federal Estate Tax
+// - Eliminate taxes on dividends and interest income for low and middle income earners (can use ALD_InvInc_ec_rt to zero capital income from tax, but can't do this by bracket)
