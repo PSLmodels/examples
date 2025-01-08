@@ -49,7 +49,7 @@ def test_2017_law_reform():
         'EITC_ps_MarriedJ': {'relation': '>', 'value': 5680},
         'EITC_InvestIncome_c': {'relation': '>', 'value': 3500},
         # ... parameters affected by TCJA and that are not indexed
-        'ID_Charity_crt_all': {'relation': '=', 'value': 0.5},
+        'ID_Charity_crt_cash': {'relation': '=', 'value': 0.5},
         'II_rt3': {'relation': '=', 'value': 0.25},
         # ... parameters affected by TCJA and that are indexed
         'II_brk3': {'relation': '>', 'value': 91900},
@@ -108,7 +108,7 @@ def test_round_trip_tcja_reform(tests_path):
     assert not pol.parameter_warnings
     assert not pol.errors
     # Layer on the CARES Act
-    pol.implement_reform({'ID_Charity_crt_all': {2020: 1.0, 2021: 0.6},
+    pol.implement_reform({'ID_Charity_crt_cash': {2020: 1.0, 2021: 0.6},
                           'STD_allow_charity_ded_nonitemizers':
                           {2020: True, 2021: False},
                           'STD_charity_ded_nonitemizers_max':
