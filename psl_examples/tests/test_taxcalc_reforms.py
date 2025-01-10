@@ -108,11 +108,14 @@ def test_round_trip_tcja_reform(tests_path):
     assert not pol.parameter_warnings
     assert not pol.errors
     # Layer on the CARES Act
-    pol.implement_reform({'ID_Charity_crt_cash': {2020: 1.0, 2021: 0.6},
-                          'STD_allow_charity_ded_nonitemizers':
-                          {2020: True, 2021: False},
-                          'STD_charity_ded_nonitemizers_max':
-                          {2020: 300.0, 2021: 0.0}})
+    pol.implement_reform({
+        "ID_Charity_crt_cash": {"2020": 1.0, "2022": 0.6},
+        "STD_allow_charity_ded_nonitemizers": {"2020": True, "2022": False},
+        "STD_charity_ded_nonitemizers_max": {
+            "2020": [300, 600, 300, 300, 300],
+            "2022": [0, 0, 0, 0, 0]}
+            }
+        )
     assert not pol.parameter_warnings
     assert not pol.errors
     pol.set_year(fyear)
