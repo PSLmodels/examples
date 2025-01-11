@@ -1,0 +1,27 @@
+// Title: Obama 2015 State of the Union Tax Proposals
+// Reform_File_Author: Jason DeBacker and John P. Ryan
+// Reform_Reference:  https://obamawhitehouse.archives.gov/the-press-office/2015/01/17/fact-sheet-simpler-fairer-tax-code-responsibly-invests-middle-class-fami
+// Reform_Baseline: 2017_law.json
+// Reform_Description:
+// - Increase Capital Gains Tax Rate to 28 Percent for higher income households
+// - $500 tax credit for two earner families
+// - Increase  Child and Dependent Care Tax Credit from $1,050 to $3,000, and increases the maximum income from $43,000 to $120,000
+// - Increase the EITC from $503 to $1,000 for taxpayers without children
+
+
+{
+    "CG_rt3": {"2016": 0.28},
+    "CG_rt4": {"2016": 0.28},
+    "CDCC_c": {"2016": 3000},
+    "CDCC_ps": {"2016": 20000},
+    "CDCC_crt": {"2016": 1.0},
+    "EITC_c": {"2016": [1000.0, 3373.0, 5572.0, 6269.0]}
+}
+
+// Provisions not modeled
+// - End “Stepped-Up Basis”
+// - Cap of $3.4 million for retirement plans and IRAs
+// - Eliminate 529 plans - tax exempt savings for education
+// - Bank tax - .07 percent tax on liabilities of firms with $50 billion in assets
+// - 28 percent corporate income tax with minimum tax on foreign earned profits
+// - Exempts Pay-As-You-Earn Student Loan Forgiveness from income taxation

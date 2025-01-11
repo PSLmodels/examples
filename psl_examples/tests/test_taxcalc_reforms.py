@@ -49,7 +49,7 @@ def test_2017_law_reform():
         'EITC_ps_MarriedJ': {'relation': '>', 'value': 5680},
         'EITC_InvestIncome_c': {'relation': '>', 'value': 3500},
         # ... parameters affected by TCJA and that are not indexed
-        'ID_Charity_crt_all': {'relation': '=', 'value': 0.5},
+        'ID_Charity_crt_cash': {'relation': '=', 'value': 0.5},
         'II_rt3': {'relation': '=', 'value': 0.25},
         # ... parameters affected by TCJA and that are indexed
         'II_brk3': {'relation': '>', 'value': 91900},
@@ -74,68 +74,94 @@ def test_2017_law_reform():
             assert act == exp, '{} a={} != e={}'.format(name, act, exp)
 
 
-def test_round_trip_tcja_reform(tests_path):
+@pytest.mark.parametrize('fyear', [2019, 2020, 2021, 2022, 2023])
+def test_round_trip_reforms(fyear, tests_path):
     """
     Check that current-law policy has the same policy parameter values in
     a future year as does a compound reform that first implements the
-    reform specified in the 2017_law.json file and then implements the
-    reform specified in the TCJA.json file.  This test checks that the
-    future-year parameter values for current-law policy (which incorporates
-    TCJA) are the same as future-year parameter values for the compound
-    round-trip reform.  Doing this check ensures that the 2017_law.json
-    and TCJA.json reform files are specified in a consistent manner.
+    2017 tax law as specified in the 2017_law.json file and then implements
+    reforms that represents new tax legislation since 2017.
+    This test checks that the future-year parameter values for
+    current-law policy (which incorporates recent legislation such as
+    the TCJA, CARES Act, and ARPA) are the same as future-year
+    parameter values for the compound round-trip reform.
+    Doing this check ensures that the 2017_law.json
+    and subsequent reform files that represent recent legislation are
+    specified in a consistent manner.
     """
-    # pylint: disable=too-many-locals
-    fyear = 2020
+    # pylint: disable=too-many-locals,too-many-statements
+
     # create clp metadata dictionary for current-law policy in fyear
-    pol = Policy()
-    pol.set_year(fyear)
-    clp_mdata = dict(pol.items())
+    clp_pol = Policy()
+    clp_pol.set_year(fyear)
+    clp_mdata = dict(clp_pol.items())
     # create rtr metadata dictionary for round-trip reform in fyear
-    pol = Policy()
+    rtr_pol = Policy()
     # Revert to 2017 law
     reform_file = os.path.join(tests_path, '..', 'taxcalc', '2017_law.json')
-    with open(reform_file, 'r') as rfile:
+    with open(reform_file, 'r', encoding='utf-8') as rfile:
         rtext = rfile.read()
-    pol.implement_reform(Policy.read_json_reform(rtext))
-    assert not pol.parameter_warnings
-    assert not pol.errors
+    rtr_pol.implement_reform(Policy.read_json_reform(rtext))
+    assert not rtr_pol.parameter_warnings
+    assert not rtr_pol.errors
     # Layer on TCJA
     reform_file = os.path.join(tests_path, '..', 'taxcalc', 'TCJA.json')
-    with open(reform_file, 'r') as rfile:
+    with open(reform_file, 'r', encoding='utf-8') as rfile:
         rtext = rfile.read()
-    pol.implement_reform(Policy.read_json_reform(rtext))
-    assert not pol.parameter_warnings
-    assert not pol.errors
+    rtr_pol.implement_reform(Policy.read_json_reform(rtext))
+    assert not rtr_pol.parameter_warnings
+    assert not rtr_pol.errors
     # Layer on the CARES Act
-    pol.implement_reform({'ID_Charity_crt_all': {2020: 1.0, 2021: 0.6},
-                          'STD_allow_charity_ded_nonitemizers':
-                          {2020: True, 2021: False},
-                          'STD_charity_ded_nonitemizers_max':
-                          {2020: 300.0, 2021: 0.0}})
-    assert not pol.parameter_warnings
-    assert not pol.errors
-    pol.set_year(fyear)
-    rtr_mdata = dict(pol.items())
+    reform_file = os.path.join(tests_path, '..', 'taxcalc', 'CARES.json')
+    with open(reform_file, 'r', encoding='utf-8') as rfile:
+        rtext = rfile.read()
+    rtr_pol.implement_reform(Policy.read_json_reform(rtext))
+    # Layer on the Consolidated Appropriations Act of 2021
+    reform_file = os.path.join(
+        tests_path, '..', 'taxcalc', 'ConsolidatedAppropriationsAct2021.json'
+    )
+    with open(reform_file, 'r', encoding='utf-8') as rfile:
+        rtext = rfile.read()
+    rtr_pol.implement_reform(Policy.read_json_reform(rtext))
+    assert not rtr_pol.parameter_warnings
+    assert not rtr_pol.errors
+    # Layer on ARPA
+    reform_file = os.path.join(tests_path, '..', 'taxcalc', 'ARPA.json')
+    with open(reform_file, 'r', encoding='utf-8') as rfile:
+        rtext = rfile.read()
+    rtr_pol.implement_reform(Policy.read_json_reform(rtext))
+    assert not rtr_pol.parameter_warnings
+    assert not rtr_pol.errors
+    # Layer on rounding from IRS through Policy.LAST_KNOWN_YEAR
+    reform_file = os.path.join(tests_path, '..', 'taxcalc', 'rounding.json')
+    with open(reform_file, 'r', encoding='utf-8') as rfile:
+        rtext = rfile.read()
+    rtr_pol.implement_reform(Policy.read_json_reform(rtext))
+    assert not rtr_pol.parameter_warnings
+    assert not rtr_pol.errors
+    rtr_pol.set_year(fyear)
+    rtr_mdata = dict(rtr_pol.items())
     # compare fyear policy parameter values
     assert clp_mdata.keys() == rtr_mdata.keys()
     fail_dump = False
     if fail_dump:
-        rtr_fails = open('fails_rtr', 'w')
-        clp_fails = open('fails_clp', 'w')
-    fail_params = list()
+        rtr_fails = open(  # pylint: disable=consider-using-with
+            'fails_rtr', 'w', encoding='utf-8'
+        )
+        clp_fails = open(  # pylint: disable=consider-using-with
+            'fails_clp', 'w', encoding='utf-8'
+        )
+    fail_params = []
     msg = '\nRound-trip-reform and current-law-policy param values differ for:'
-    for pname in clp_mdata.keys():
+    for pname in clp_mdata.keys():  # pylint: disable=consider-using-dict-items
         rtr_val = rtr_mdata[pname]
         clp_val = clp_mdata[pname]
         if not np.allclose(rtr_val, clp_val):
             fail_params.append(pname)
-            msg += '\n  {} in {} : rtr={} clp={}'.format(
-                pname, fyear, rtr_val, clp_val
-            )
+            msg += '\n  {pname} in {fyear} : rtr={rtr_val} clp={clp_val}'
             if fail_dump:
-                rtr_fails.write('{} {} {}\n'.format(pname, fyear, rtr_val))
-                clp_fails.write('{} {} {}\n'.format(pname, fyear, clp_val))
+                rtr_fails.write(f'{pname} {fyear} {rtr_val}\n')
+                clp_fails.write(f'{pname} {fyear} {clp_val}\n')
     if fail_dump:
         rtr_fails.close()
         clp_fails.close()

@@ -1,0 +1,25 @@
+// REFORM TO Represent IIT and Payroll tax provisions of the
+// 2024 Harris-Walz campaign
+// USING TAX-CALCULATOR 4.4.0
+// WITH 2025-to-2026 INDEXING FACTOR = 1.024900
+//  AND 2028-to-2029 INDEXING FACTOR = 1.021800
+{
+    // Expand the Child Tax Credit
+    "CTC_is_refundable": {"2025": true},
+    "ODC_is_refundable": {"2025": true},
+    "CTC_include17": {"2025": true},
+    "CTC_new_c": {"2025": 1000},
+    "CTC_new_c_under6_bonus": {"2025": 600},
+    "CTC_new_for_all": {"2025": true},
+    "CTC_new_ps": {"2025": [75000, 150000, 75000, 112500, 150000]},
+    "CTC_new_prt": {"2025": 0.05},
+    // Note: Do not model newborn bonus as no data is available
+    // Expand the Earned Income Tax Credit
+    "EITC_c": {"2025": [1797, 4328, 7152, 8046]},
+    "EITC_rt": {"2025": [0.153, 0.34, 0.4, 0.45]},
+    "EITC_ps": {"2025": [13888, 23350, 23350, 23350]},
+    "EITC_ps_MarriedJ": {"2025": [7120, 7120, 7120, 7120]},
+    "EITC_MinEligAge": {"2025": 19},
+    "EITC_MaxEligAge": {"2025": 125},
+    "EITC_sep_filers_elig": {"2025": true}
+}
